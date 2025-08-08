@@ -124,11 +124,13 @@
         
         const searchTerm = searchInput.value.trim(); 
         const highlightedName = highlightText(item.name, searchTerm);
+        const highlightedAge = highlightText(item.age.toString(), searchTerm);
+        const highlightedGender = highlightText(item.gender, searchTerm);
         
         div.innerHTML = `
           <div class="item-field"><strong>Name:</strong> ${highlightedName}</div>
-          <div class="item-field"><strong>Age:</strong> ${item.age}</div>
-          <div class="item-field"><strong>Gender:</strong> ${item.gender}</div>
+          <div class="item-field"><strong>Age:</strong> ${highlightedAge}</div>
+          <div class="item-field"><strong>Gender:</strong> ${highlightedGender}</div>
         `;
         itemContainer.appendChild(div);
       });
