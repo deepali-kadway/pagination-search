@@ -59,17 +59,29 @@
   </div>
 
   <script>
-    // Dummy data with Name, Age, Gender
-    const data = Array.from({ length: 100 }, (_, i) => {
-      const names = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emily', 'Robert', 'Lisa', 'Mark', 'Jennifer'];
-      const genders = ['Male', 'Female'];
-      
-      return {
-        name: names[i % names.length] + ' ' + (Math.floor(i / names.length) + 1),
-        age: Math.floor(Math.random() * 50) + 18,
-        gender: genders[i % 2]
-      };
-    });
+    // Simple dummy data
+    const data = [
+      { name: "John Smith", age: 25, gender: "Male" },
+      { name: "Jane Doe", age: 30, gender: "Female" },
+      { name: "Mike Johnson", age: 22, gender: "Male" },
+      { name: "Sarah Wilson", age: 28, gender: "Female" },
+      { name: "David Brown", age: 35, gender: "Male" },
+      { name: "Emily Davis", age: 27, gender: "Female" },
+      { name: "Tom Miller", age: 31, gender: "Male" },
+      { name: "Lisa Garcia", age: 24, gender: "Female" },
+      { name: "Mark Taylor", age: 29, gender: "Male" },
+      { name: "Anna Lee", age: 26, gender: "Female" },
+      { name: "Chris White", age: 33, gender: "Male" },
+      { name: "Amy Clark", age: 23, gender: "Female" },
+      { name: "Steve Hall", age: 32, gender: "Male" },
+      { name: "Nina King", age: 21, gender: "Female" },
+      { name: "Paul Scott", age: 34, gender: "Male" },
+      { name: "Kate Adams", age: 25, gender: "Female" },
+      { name: "Jim Green", age: 28, gender: "Male" },
+      { name: "Rose Turner", age: 30, gender: "Female" },
+      { name: "Dan Wright", age: 27, gender: "Male" },
+      { name: "Eva Lopez", age: 29, gender: "Female" }
+    ];
 
     let filteredData = [...data];
     let currentPage = 1;
@@ -80,17 +92,24 @@
     const searchInput = document.getElementById('searchInput');
     const itemsPerPageSelect = document.getElementById('itemsPerPage');
 
+    // Function to highlight search terms in the item names.
+    // text: the text to search in, searchTerm: the term to highlight
     function highlightText(text, searchTerm) {
       if (!searchTerm) return text;
       
-      const regex = new RegExp(`(${searchTerm})`, 'gi');
-      return text.replace(regex, '<span class="highlight">$1</span>');
+      // RegExp() JS function to searchItem and check for global and case-insensitive matches
+      const regex = new RegExp(searchTerm, 'gi');
+      return text.replace(regex, `<span class="highlight">${searchTerm}</span>`);
     }
 
+    // Function to render items based on current page and search term
     function renderItems() {
       itemContainer.innerHTML = '';
+      // calculate starting and ending index for current page
       const start = (currentPage - 1) * itemsPerPage;
       const end = start + itemsPerPage;
+      // used slice on filteredData array to get the items for the current page.
+      // eg: filteredData.slice(0,10) will return first 10 items
       const itemsToDisplay = filteredData.slice(start, end);
 
       if (itemsToDisplay.length === 0) {
@@ -98,11 +117,12 @@
         return;
       }
 
+      // iterate through each items in itemsToDisplay and create a div for each item
       itemsToDisplay.forEach(item => {
         const div = document.createElement('div');
         div.className = 'item';
         
-        const searchTerm = searchInput.value.trim();
+        const searchTerm = searchInput.value.trim(); 
         const highlightedName = highlightText(item.name, searchTerm);
         
         div.innerHTML = `
@@ -116,6 +136,7 @@
 
     function renderPagination() {
       pagination.innerHTML = '';
+      // filteredData = 20, itemsPerPage = 10, totalPages = 2. ceil() function rounds up, 21st item will go to page 3.
       const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
       for (let i = 1; i <= Math.min(10, totalPages); i++) {
@@ -127,11 +148,11 @@
         a.href = '#';
         a.addEventListener('click', (e) => {
           e.preventDefault();
-          currentPage = i;
-          renderItems();
-          renderPagination();
+          currentPage = i; //updating current page
+          renderItems(); //show items for the selected page
+          renderPagination(); // update pagination to reflect active page
         });
-        li.appendChild(a);
+        li.appendChild(a); // <li class="page-item"><a class="page-link">1</a></li>
         pagination.appendChild(li);
       }
     }
@@ -143,7 +164,7 @@
         item.age.toString().includes(searchTerm) || 
         item.gender.toLowerCase().includes(searchTerm)
       );
-      currentPage = 1;
+      currentPage = 1; //resets to first page on new search
       renderItems();
       renderPagination();
     }
